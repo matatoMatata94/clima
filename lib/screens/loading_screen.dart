@@ -7,36 +7,45 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  void getLocation() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
+  @override
+  void initState() {
+    super.initState();
+    Future<void> getCurrentLocationCheckingPermissions() async {
+      bool serviceEnabled;
+      LocationPermission locationPermission;
 
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        return Future.error('Location Not Available');
+      // Test if location services are enabled.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // Location services are not enabled don't continue
+        // accessing the position and request users of the
+        // App to enable the location services.
+        return Future.error(
+            'Location services are disabled. Please activate them.');
+      } else {
+        locationPermission = await Geolocator.checkPermission();
+        if (LocationPermission.unableToDetermine == locationPermission) {
+          return Future.error(
+              'Unable to determine if location permissions are enabled.');
+        } else if (LocationPermission.denied == locationPermission ||
+            LocationPermission.deniedForever == locationPermission) {
+          print(Future.error('Location permissions are denied: ' +
+              locationPermission.toString()));
+          locationPermission = await Geolocator.requestPermission();
+        }
+
+        if (LocationPermission.whileInUse == locationPermission ||
+            LocationPermission.always == locationPermission) {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.lowest);
+          print('Position: $position');
+        }
       }
-    } else if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.lowest);
-      print('Location: $position');
-    } else {
-      throw Exception('Error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: MaterialButton(
-          onPressed: () {
-            getLocation();
-          },
-          child: const Text('Get Location'),
-        ),
-      ),
-    );
+    return const Scaffold();
   }
 }
