@@ -1,4 +1,5 @@
 import 'package:clima/services/location.dart';
+import 'package:clima/utilities/env.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -19,10 +20,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await location.getCurrentLocation();
   }
 
+//lon: 52.52 lat: 13.41
   void getData() async {
+    String key = Env.key;
     Response response = await get(
       Uri.parse(
-          'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=apparent_temperature'),
+          'https://api.openweathermap.org/data/2.5/weather?lat=13.41&lon=52.52&appid=$key'),
     );
     print(response.body);
   }
