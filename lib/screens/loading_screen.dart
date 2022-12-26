@@ -29,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     var weatherData = networkHelper.getData();
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen();
+      return LocationScreen(weatherData);
     }));
   }
 
