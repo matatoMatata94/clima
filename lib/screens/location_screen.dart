@@ -12,12 +12,12 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
-    print(widget.weatherData);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.weatherData);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
