@@ -10,14 +10,25 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  int? condition;
+  int? temperature;
+  String? cityName;
+
   @override
   void initState() {
     super.initState();
+    updateUI(widget.weatherData);
+  }
+
+  void updateUI(dynamic weatherData) {
+    condition = weatherData['weather'][0]['id'];
+    double temp = weatherData['main']['temp'];
+    temperature = temp.toInt();
+    cityName = weatherData['name'];
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.weatherData);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -56,12 +67,12 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
-                  children: const <Widget>[
+                  children: <Widget>[
                     Text(
-                      '32°',
+                      '${temperature.toString()}°',
                       style: kTempTextStyle,
                     ),
-                    Text(
+                    const Text(
                       '☀️',
                       style: kConditionTextStyle,
                     ),
@@ -83,7 +94,3 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
-
-// int weatherCode = decodedData['weather'][0]['id'];
-// double temperature = decodedData['main']['temp'];
-// String cityName = decodedData['name'];
