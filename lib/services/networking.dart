@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clima/services/weatherData.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkHelper {
@@ -7,15 +8,19 @@ class NetworkHelper {
 
   String url;
 
-  Future getData() async {
+  Future<WeatherData?> getData() async {
     http.Response response = await http.get(
       Uri.parse(url),
     );
-    if (response.statusCode == 200) {
-      String data = response.body;
-      return jsonDecode(data);
-    } else {
-      print(response.statusCode);
+    try {
+      if (response.statusCode == 200) {
+        String data = response.body;
+        return WeatherData.fromJson(jsonDecode(data));
+      } else {
+        print(response.statusCode);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

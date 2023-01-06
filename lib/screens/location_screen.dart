@@ -1,3 +1,4 @@
+import 'package:clima/services/weatherData.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +19,10 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUI(widget.locationWeather);
   }
 
-  void updateUI(dynamic weatherData) {
-    var condition = weatherData['weather'][0]['id'];
-    String cityName = weatherData['name'];
-    double temp = weatherData['main']['temp'];
+  void updateUI(WeatherData weatherData) {
+    var condition = weatherData.conditionID;
+    String cityName = weatherData.cityName;
+    double temp = weatherData.temperature;
     temperature = temp.toInt();
   }
 
